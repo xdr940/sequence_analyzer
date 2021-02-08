@@ -1,0 +1,2 @@
+sequence_file: 'sequence.txt'
+num_workers: 12
