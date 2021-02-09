@@ -1,2 +1,6 @@
-sequence_file: 'sequence.txt'
+sequences_file: '../sequences.txt'
+data_path: '/home/roit/datasets'
 num_workers: 12
+step: 1
+batch_size: 8
+
