@@ -100,62 +100,63 @@ class Photometor():
         error_maps = torch.cat(error_maps,dim=0)
         return error_maps
 
-def PhotometricErr(paths,pool,batch_size,step):
-
-    ssim = SSIM().cuda()
-
-
-    epoch = math.ceil(len(paths)/batch_size)
-    error_maps = []
-    for i in tqdm(range(0,epoch)):
-
-        if i==epoch-1:#last batch,
-            residue = len(paths )% batch_size
-            if residue==0:
-                front_files = paths[i * batch_size:-step]
-                rear_files = paths[i * batch_size + step:]
-            elif step > residue:
-                break
-            elif step <= residue :
-                residue_comp = residue-step
-
-                front_files = paths[i*batch_size:i*batch_size + residue_comp]
-                rear_files=paths[i*batch_size+step:]
-        else:
-            rear_files = paths[i*batch_size+step:i*batch_size+step+batch_size]
-            front_files =  paths[i*batch_size:i*batch_size+batch_size]
-
-        #with Pool(processes=3) as p:
-        front_imgs=pool.map(imgload,rear_files)
-        rear_imgs=pool.map(imgload,front_files)
-
-        front_batch = torch.cat(front_imgs,dim=0)
-        rear_batch= torch.cat(rear_imgs,dim=0)
-
-
-        if front_batch.shape != rear_batch.shape:
-            bx, _, _, _ = front_batch.shape
-            by, _, _, _ = rear_batch.shape
-            b = min(bx, by)
-            front_batch = front_batch[:b, ]
-            rear_batch = rear_batch[:b, ]
-
-
-
-        loss_ssim = ssim(front_batch, rear_batch).mean(1, True)
-
-        abs_diff = torch.abs(front_batch - rear_batch)
-        l1_loss = abs_diff.mean(1, True)  # [b,1,h,w]
-
-        error = 0.85 * loss_ssim + 0.15 * l1_loss
-        error_maps.append(error.cpu().numpy())
-        # if mode =='mean':
-        #     ret_list += loss.mean([1, 2, 3]).cpu().numpy().tolist()
-        # elif mode == 'raw'
-    return error_maps
-
-
-
-
+#old
+# def PhotometricErr(paths,pool,batch_size,step):
+#
+#     ssim = SSIM().cuda()
+#
+#
+#     epoch = math.ceil(len(paths)/batch_size)
+#     error_maps = []
+#     for i in tqdm(range(0,epoch)):
+#
+#         if i==epoch-1:#last batch,
+#             residue = len(paths )% batch_size
+#             if residue==0:
+#                 front_files = paths[i * batch_size:-step]
+#                 rear_files = paths[i * batch_size + step:]
+#             elif step > residue:
+#                 break
+#             elif step <= residue :
+#                 residue_comp = residue-step
+#
+#                 front_files = paths[i*batch_size:i*batch_size + residue_comp]
+#                 rear_files=paths[i*batch_size+step:]
+#         else:
+#             rear_files = paths[i*batch_size+step:i*batch_size+step+batch_size]
+#             front_files =  paths[i*batch_size:i*batch_size+batch_size]
+#
+#         #with Pool(processes=3) as p:
+#         front_imgs=pool.map(imgload,rear_files)
+#         rear_imgs=pool.map(imgload,front_files)
+#
+#         front_batch = torch.cat(front_imgs,dim=0)
+#         rear_batch= torch.cat(rear_imgs,dim=0)
+#
+#
+#         if front_batch.shape != rear_batch.shape:
+#             bx, _, _, _ = front_batch.shape
+#             by, _, _, _ = rear_batch.shape
+#             b = min(bx, by)
+#             front_batch = front_batch[:b, ]
+#             rear_batch = rear_batch[:b, ]
+#
+#
+#
+#         loss_ssim = ssim(front_batch, rear_batch).mean(1, True)
+#
+#         abs_diff = torch.abs(front_batch - rear_batch)
+#         l1_loss = abs_diff.mean(1, True)  # [b,1,h,w]
+#
+#         error = 0.85 * loss_ssim + 0.15 * l1_loss
+#         error_maps.append(error.cpu().numpy())
+#         # if mode =='mean':
+#         #     ret_list += loss.mean([1, 2, 3]).cpu().numpy().tolist()
+#         # elif mode == 'raw'
+#     return error_maps
+#
+#
+#
+#
 
 

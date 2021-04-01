@@ -3,6 +3,9 @@
 olds
 .idea
 sequences
+*.npy
+*.csv
+*.txt
 
 
 # Byte-compiled / optimized / DLL files

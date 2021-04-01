@@ -1,0 +1,10 @@
+data_path: '/home/roit/datasets/mcv5'
+#data_path: '/home/roit/bluep2/datasets/kitti_odo_color'
+logs: 'logs/mcv5_shaders_comp.txt'
+#logs: 'logs/kitti_odo.txt'
+#sequences_file: 'logs/mcv3.txt'
+analyzer_wkdir: "/home/roit/datasets/analyzer_sequences"
+num_workers: 12
+step: 1
+batch_size: 8
+

@@ -33,7 +33,7 @@ def imgload(path):#1,3,h,w
         # (https://github.com/python-pillow/Pillow/issues/835)
         with open(path, 'rb') as f:
             with Image.open(f) as img:
-                return img.convert('L').resize((256,192))
+                return img.convert('L').resize((388,256))
     img = pil_loader(path)
     return transforms.ToTensor()(img).unsqueeze(0).cuda()
 
